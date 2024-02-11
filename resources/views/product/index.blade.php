@@ -11,9 +11,20 @@
                 {{-- <h2>Laravel 8 CRUD with Image Upload Example from scratch - ItSolutionStuff.com</h2> --}}
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('product.create') }}"> Create New Product</a>
+                <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Product</a>
             </div>
         </div>
+        <form action="" method="GET">
+            <input type="text" name="productSearch" required/>
+            <button type="submit">Submit</button>
+        </form>
+        {{-- <form action="{{ route('import/products') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="file" class="form-control">
+            <br>
+            <button class="btn btn-success">Import Product Data</button>
+             <a class="btn btn-warning" href="{{ route('export') }}">Export User Data</a>
+        </form> --}}
     </div>
     <div class="push-top">
         @if (session()->get('success'))
@@ -35,7 +46,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $i=1; ?>
+                <?php $i=1;     ?>
                 @foreach ($products as $product)
                     <tr>
                         <td>{{ $i++ }}</td>
@@ -46,11 +57,11 @@
                         <td>{{ $product->stock }}</td>
                         <td><img src="/image/{{ $product->images }}" width="100px"></td>
                         <td>
-                            <form action="{{ route('product.destroy', $product->id) }}" method="POST">
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
 
-                                <a class="btn btn-info" href="{{ route('product.show', $product->id) }}">Show</a>
+                                <a class="btn btn-info" href="{{ route('products.show', $product->id) }}">Show</a>
 
-                                <a class="btn btn-primary" href="{{ route('product.edit', $product->id) }}">Edit</a>
+                                <a class="btn btn-primary" href="{{ route('products.edit', $product->id) }}">Edit</a>
 
                                 @csrf
                                 @method('DELETE')
@@ -60,6 +71,7 @@
                         </td>
                     </tr>
                 @endforeach
+                {{ $products->links('pagination::bootstrap-4') }}
             </tbody>
         </table>
     <div>

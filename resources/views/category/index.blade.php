@@ -14,6 +14,19 @@
                 <a class="btn btn-success" href="{{ route('category.create') }}"> Create New category</a>
             </div>
         </div>
+
+        <form action="" method="GET">
+            <input type="text" name="category" required/>
+            <button type="submit">Submit</button>
+        </form>
+
+        {{-- <form action="{{ route('import/category') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="file" class="form-control">
+            <br>
+            <button class="btn btn-success">Import Category Data</button>
+            <a class="btn btn-warning" href="{{ route('export') }}">Export User Data</a>
+        </form> --}}
     </div>
     <div class="push-top">
         @if (session()->get('success'))
@@ -26,6 +39,8 @@
                 <tr class="table-warning">
                     <td>ID</td>
                     <td>Name</td>
+                    <td>Parent Category</td>
+                    <td>Status</td>
                     <td class="text-center">Action</td>
                 </tr>
             </thead>
@@ -34,6 +49,20 @@
                     <tr>
                         <td>{{ $cate->id }}</td>
                         <td>{{ $cate->name }}</td>
+                        <td>
+                            @foreach ($categories as $catsse)
+                                @if ($cate->parent_id == $catsse->id)
+                                    {{ $catsse->name }}
+                                @endif
+                            @endforeach
+                            </td>
+                        <td>
+                            @if ($cate->status == 1)
+                                {{ "Active" }}
+                                @else
+                                {{ "DeActive" }}
+                            @endif
+                        </td>
                         <td class="text-center">
                             <a href="{{ route('category.edit', $cate->id) }}" class="btn btn-primary btn-sm"">Edit</a>
                             <form action="{{ route('category.destroy', $cate->id) }}" method="post"
@@ -45,6 +74,9 @@
                         </td>
                     </tr>
                 @endforeach
+                {{-- {{ $categories->links('pagination::bootstrap-4') }} --}}
+
+
             </tbody>
         </table>
         <div>

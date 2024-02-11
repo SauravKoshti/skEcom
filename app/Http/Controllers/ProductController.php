@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Imports\ProductsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        if ($request->get('productSearch')) {
+            $productSearch = $request->input('productSearch');
+            $products = Product::where('name', 'like', '%' . $productSearch . '%')->paginate(10);
+            // dd($products);
+        } else {
+            $products = Product::paginate(10);
+        }
+
         return view('product.index', compact('products'));
     }
 
@@ -47,8 +56,8 @@ class ProductController extends Controller
             'stock' => $request->input('stock'),
             'images' => json_encode($images),
         ]);
-// dd($product);
-        return redirect()->route('product.index')->with('success', 'Product created successfully.');
+        // dd($product);
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -60,7 +69,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('product.show',compact('product'));
+        return view('product.show', compact('product'));
     }
 
     /**
@@ -73,7 +82,7 @@ class ProductController extends Controller
     {
         //
         $product = Product::findOrFail($id);
-        return view('product.edit',compact('product'));
+        return view('product.edit', compact('product'));
     }
 
     /**
@@ -100,14 +109,13 @@ class ProductController extends Controller
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $images = "$profileImage";
-        }else{
+        } else {
             unset($images);
         }
         $catId = Product::findOrFail($id);
         $catId->update($input);
-        return redirect()->route('product.index')
+        return redirect()->route('products.index')
             ->with('success', 'Product update successfully.');
-
     }
 
     /**
@@ -121,6 +129,17 @@ class ProductController extends Controller
         //
         $data = Product::findOrFail($id);
         $data->delete($id);
-        return redirect('/product')->with('completed', 'Product has been deleted');
+        return redirect('/products')->with('completed', 'Product has been deleted');
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function importProducts()
+    {
+        // Excel::import(new UsersImport, request()->file('file'));
+        // Excel::import(new CategoryImport, request()->file('file'));
+        Excel::import(new ProductsImport, request()->file('file'));
+        return back();
     }
 }

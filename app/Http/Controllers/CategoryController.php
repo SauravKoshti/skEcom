@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CategoryImport;
 use Illuminate\Http\Request;
 use App\Models\Category;
-// use App\Imports\CategoryImportClass;
-// use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('children')->get();
+        if($request->input('category')){
+            $category = $request->input('category');
+            $categories = Category::where('name', 'like', '%' . $category . '%')->paginate(10);
+        }
+        else {
+            $categories = Category::paginate(10);
+        }
+
         return view('category.index', compact('categories'));
     }
 
@@ -60,10 +67,14 @@ class CategoryController extends Controller
         return redirect('/category')->with('success', 'Category deleted successfully.');
     }
 
-    // public function import()
-    // {
-    //     Excel::import(new CategoryImportClass, request()->file('csv_file'));
-    //     return back();
-    //     // Optionally, you can redirect or add a success message here
-    // }
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function importCategory()
+    {
+        // Excel::import(new UsersImport, request()->file('file'));
+        // Excel::import(new CategoryImport, request()->file('file'));
+        Excel::import(new CategoryImport, request()->file('file'));
+        return back();
+    }
 }
