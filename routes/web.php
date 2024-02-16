@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MyController;
+use App\Http\Controllers\User\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,9 @@ use App\Http\Controllers\MyController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('user.welcome');
+// });
 Route::resource('products', ProductController::class);
 Route::resource('category', CategoryController::class);
 // Route::post('search', [MyController::class, 'import'])->name('import');
@@ -26,3 +27,7 @@ Route::post('import', [MyController::class, 'import'])->name('import');
 Route::get('importExportView', [MyController::class, 'importExportView']);
 Route::post('import/category', [CategoryController::class, 'importCategory'])->name('importCategory');
 Route::post('import/products', [ProductController::class, 'importProducts'])->name('importProducts');
+
+
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/login', [HomeController::class, 'login'])->name('login');
