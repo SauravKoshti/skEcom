@@ -5,6 +5,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MyController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\UserAuthController;
+use App\Http\Controllers\User\UserProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +32,16 @@ Route::post('import/products', [ProductController::class, 'importProducts'])->na
 
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/login', [HomeController::class, 'login'])->name('login');
+Route::get('/search', [HomeController::class,'search'])->name('search');
+// Route::get('/', 'WelcomePageController@index')->name('welcome');
+Route::get('/login', [UserAuthController::class, 'login'])->name('login');
+Route::post('/loginUser', [UserAuthController::class, 'loginUser'])->name('loginUser');
+Route::get('/register', [UserAuthController::class, 'register'])->name('register');
+Route::post('/registerUser', [UserAuthController::class, 'registerUser'])->name('registerUser');
+Route::get('/logout', [UserAuthController::class, 'registerUser'])->name('logout');
+Route::get('/product-detail/{id}', [UserProductController::class, 'index'])->name('index');
+Route::post('add-to-cart', [UserProductController::class, 'addToCart'])->name('addToCart');
+Route::get('/cart', [UserProductController::class, 'showCartTable']);
+Route::delete('remove-from-cart', [UserProductController::class, 'removeCartItem']);
+// Route::get('delete-cart', [UserProductController::class, 'clearCart']);
+Route::get('remove-from-cart', [UserProductController::class, 'removeCartItem']);
