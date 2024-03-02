@@ -33,8 +33,8 @@ class MyController extends Controller
     public function import()
     {
         // Excel::import(new UsersImport, request()->file('file'));
-        // Excel::import(new CategoryImport, request()->file('file'));
-        Excel::import(new ProductsImport, request()->file('file'));
+        Excel::import(new CategoryImport, request()->file('file'));
+        // Excel::import(new ProductsImport, request()->file('file'));
         return back();
     }
 }
