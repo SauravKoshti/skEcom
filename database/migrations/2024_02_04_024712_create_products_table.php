@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 8, 2);
             $table->integer('stock');
             $table->json('images')->nullable();
+            
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

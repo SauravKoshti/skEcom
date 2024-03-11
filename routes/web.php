@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MyController;
+use App\Http\Controllers\PunchController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserProductController;
+use App\Http\Controllers\User\StripePaymentTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +31,6 @@ Route::post('import', [MyController::class, 'import'])->name('import');
 Route::get('importExportView', [MyController::class, 'importExportView']);
 Route::post('import/category', [CategoryController::class, 'importCategory'])->name('importCategory');
 Route::post('import/products', [ProductController::class, 'importProducts'])->name('importProducts');
-
-
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class,'search'])->name('search');
 // Route::get('/', 'WelcomePageController@index')->name('welcome');
@@ -45,3 +45,12 @@ Route::get('/cart', [UserProductController::class, 'showCartTable']);
 Route::delete('remove-from-cart', [UserProductController::class, 'removeCartItem']);
 // Route::get('delete-cart', [UserProductController::class, 'clearCart']);
 Route::get('remove-from-cart', [UserProductController::class, 'removeCartItem']);
+Route::get('stripe', [StripePaymentTestController::class, 'stripe']);
+Route::post('stripe', [StripePaymentTestController::class, 'stripePost'])->name('stripe.post');
+// Route::controller(StripePaymentTestController::class)->group(function(){
+//     Route::get('stripe', 'stripe');
+//     Route::post('stripe', 'stripePost')->name('stripe.post');
+// });
+Route::get('punch-in', [PunchController::class, 'punchIn']);
+Route::get('punch-out', [PunchController::class, 'punchOut']);
+Route::get('/calculate-total-time', [PunchController::class, 'calculateTotalTime']);

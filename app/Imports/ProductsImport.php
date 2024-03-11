@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Models\Product;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
+use DB;
 class ProductsImport implements ToModel, WithHeadingRow
 {
     /**
@@ -16,7 +16,8 @@ class ProductsImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // dd($row);
-        return new Product([
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $return = new Product([
         'name' => $row['name'],
         'description' => $row['description'],
         'category_id' => $row['category_id'],
@@ -24,5 +25,6 @@ class ProductsImport implements ToModel, WithHeadingRow
         'stock' => $row['stock'],
         'images' => $row['images'],
         ]);
+        return $return;
     }
 }

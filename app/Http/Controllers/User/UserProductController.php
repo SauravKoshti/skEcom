@@ -15,8 +15,9 @@ class UserProductController extends Controller
     //
     public function index($id)
     {
-        $productData = Cart::findOrFail($id);
 
+        $productData = Product::findOrFail($id);
+        // dd($productData);
         return view('user.product-detail', compact('productData'));
     }
 
@@ -31,7 +32,7 @@ class UserProductController extends Controller
 
     public function removeCartItem(Request $request)
     {
-        dd($request);
+        // dd($request);
         if ($request->id) {
 
             $cart = session()->get('cart');
